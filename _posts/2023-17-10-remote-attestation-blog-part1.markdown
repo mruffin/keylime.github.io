@@ -85,7 +85,7 @@ IMA also has another capability worth mentioning. Instead of using a third party
 
 <div style="text-align: center;">
 <img  src="/Users/margieruffin/Desktop/Research/Keylime/keylime.github.io/assets/images/keylime.png" alt="Keylime Logo">
-</div
+</div>
 
 Now that you know a little about some of the important components of Remote Attestation, I would like to introduce you to Keylime, a highly scalable, TPM-based remote boot attestation and runtime integrity measurement solution. Keylime helps to provide trust between its users and remote nodes. 
 
