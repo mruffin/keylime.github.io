@@ -5,7 +5,8 @@ author: "Margie Ruffin"
 date:   2023-17-10
 --- -->
 
-# <h1 style="text-align: center; color:#6B98BF;"> 🚧 A Hitchhikers Guide to Remote Attestation 🚧</h1>
+# <h1 style="text-align: center; color:#6B98BF;"> 🚧 A Hitchhiker's Guide to Remote Attestation 🚧</h1>
+<!-- # $${\color{#6B98BF}🚧 A Hitchhikers Guide to Remote Attestation 🚧}$$ -->
 By: Margie Ruffin <br>
 October 17, 2023
 
