@@ -1,9 +1,9 @@
----
+<!-- ---
 layout: blog
 title:  "A Hitchhikers Guide to Remote Attestation"
 author: "Margie Ruffin"
 date:   2023-17-10
----
+--- -->
 
 # <h1 style="text-align: center; color:#DF4E4E;"> 🚧 A Hitchhikers Guide to Remote Attestation 🚧</h1>
 By: Margie Ruffin <br>
