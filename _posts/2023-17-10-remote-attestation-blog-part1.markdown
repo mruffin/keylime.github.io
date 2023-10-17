@@ -5,7 +5,7 @@ author: "Margie Ruffin"
 date:   2023-17-10
 --- -->
 
-# <h1 style="text-align: center; color:#DF4E4E;"> 🚧 A Hitchhikers Guide to Remote Attestation 🚧</h1>
+# <h1 style="text-align: center; color:#6B98BF;"> 🚧 A Hitchhikers Guide to Remote Attestation 🚧</h1>
 By: Margie Ruffin <br>
 October 17, 2023
 
@@ -15,7 +15,7 @@ This article is Part 1 of this blog series revolving around Remote Attestation a
 
 <br>
 
-<h3 style="text-align left; color:#3399FF;"> Introduction to Remote Attestation </h3>
+<h3 style="text-align left; color:#6B98BF;"> Introduction to Remote Attestation </h3>
 
 Cloud service providers, for example, inherently ask their customers to put significant trust in them each time they provide a service to them. Where does that trust come from? Why should a customer believe anything that a provider says is true? In reality, they shouldn’t unless it has been proven to them that their running systems have not been tampered with. Here is where Remote Attestation comes in. Attestation is designed to prove a property of a system to a third party, which, in this case, is you. It can provide proof that the execution environment can be trusted before beginning to execute code or before proceeding to deliver any secret information. 
 
@@ -39,7 +39,7 @@ In this article, we will detail the different aspects of remote attestation base
     <li> Introduction to Keylime, A Remote Attestation Software </li>
 </ul>
 
-<h3 style="text-align left; color:#3399FF;"> What is Secure Boot? </h3>
+<h3 style="text-align left; color:#6B98BF;"> What is Secure Boot? </h3>
 
 Trusted boot technologies rely on a “Root of Trust” (RoT), a source that can always be trusted within a cryptographic system. The RoT is usually a piece of code or hardware that’s been hardened well enough that it is unlikely to be compromised. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
 
@@ -47,11 +47,11 @@ Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure dev
 
 Secure boot prevents boot if the two signatures, the preloaded value, and the calculated value during the boot process do not match. If the decrypted hash does not match the new one just taken, the secure boot will fail for reasons such as someone changing the kernel. This process of checking the kernel's signatures occurs before the OS ever runs.
 
-<h3 style="text-align left; color:#3399FF;"> What is Measured Boot? </h3>
+<h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
 
 Measured Boot uses the same RoT as Secure Boot; however, unlike Secure Boot, it will check each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are stored inside the TPM so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
 
-<h3 style="text-align left; color:#3399FF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
+<h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
 These two processes go hand-in-hand to ensure trusted Operating System (O/S) boots. Measured Boot guards the system from the processor powering on to the point where the operating system is ready to run. The issue is that once the O/S is booted, Measured Boot stops and its output is encapsulated into the measured boot log and the PCR values in the TPM. Now that the O/S is unguarded, it is **conceivable** that someone could manage to navigate to the boot event log, the PCRs, and the TPM and alter them retroactively. They could even go as far as to replace the TPM device with a virtual TPM. 
 
@@ -59,7 +59,7 @@ Secure Boot depends on Measured Boot to guard the UEFI Bios. Measured Boot will 
 
 Measured Boot guards the UEFI Bios during the secure boot process by taking a hash at its step in the boot process. Secure boot guards the post-boot integrity of the kernel by keeping it in “lockdown mode” in case something suspicious happens. Both are needed to get to a point where we have a completely booted system with a kernel that can be trusted. 
 
-<h3 style="text-align left; color:#3399FF;"> Integrity Measurement Architecture (IMA) for Continuous Attestation </h3>
+<h3 style="text-align left; color:#6B98BF;"> Integrity Measurement Architecture (IMA) for Continuous Attestation </h3>
 
 The two previously described aspects of Remote Attestation are helpful for a one-time check to see if the server you have provisioned was altered before it was booted and running. But what can you do if you want to continuously make sure that things aren’t being altered in real-time? You can use Linux kernel's Integrity Measurement Architecture (IMA) for that. Implementing IMA with your Remote Attestation framework lets you detect if files have been accidentally or maliciously altered. You can, both remotely and locally, appraise a file's current measurement against a "good" value stored as an extended attribute and enforce local file integrity. IMA collects file hashes and places them in kernel memory where other applications cannot access or modify them. With Secure and Measured Boot enabled, we established a chain of trust from the TPM all the way up to the running kernel. Because the kernel is now trusted, we can trust it to measure files with IMA, thus extending that trust to the files. 
 
@@ -80,7 +80,7 @@ In just a few short steps, we can see how IMA works.
 
 IMA also has another capability worth mentioning. Instead of using a third party to appraise files as described above, IMA has the ability to do its own local appraisals. If it were configured to do so, if a file with an IMA hash is opened for reading or executing, the appraisal extension will check to see if the contents match the stored hash. This extension forbids any operation over a specific file in case the current measurement does not match the previous one unless stated otherwise. The stored hash is the value previously stored in the measurement file within the kernel memory for that file. The ima_appraise kernel command-line parameter will determine what happens if they don't match. If it is set to "enforce," access to the file is denied, while "fix" will update the IMA xattr with the new value.
 
-<h3 style="text-align; color:#3399FF;"> Introduction to Keylime, a Remote Attestation Framework </h3>
+<h3 style="text-align; color:#6B98BF;"> Introduction to Keylime, a Remote Attestation Framework </h3>
 
 <div style="text-align: center;">
 <img  src="/Users/margieruffin/Desktop/Research/Keylime/keylime.github.io/assets/images/keylime.png" alt="Keylime Logo">
@@ -133,4 +133,4 @@ Keylime is commonly used either on bare metal hardware or in VMs where the TPM i
 
 While it won’t stop anything after an alert is raised, Keylime is still a great tool to have because it will tell you what has happened and where. Perfect for someone managing a lot of machines!
 
-Want to get in on all the action? Check out blog post part 2 (coming soon) in this series, <span style="color:#3399FF"><strong> This is Keylime, a BEAST, but Totally Worth It</strong></span>, for a step-by-step tutorial on how to set up Keylime on your own machines. 
+Want to get in on all the action? Check out blog post part 2 (coming soon) in this series, <span style="color:#6B98BF"><strong> This is Keylime, a BEAST, but Totally Worth It</strong></span>, for a step-by-step tutorial on how to set up Keylime on your own machines. 
