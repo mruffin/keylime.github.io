@@ -50,7 +50,7 @@ Secure Boot prevents boot if the signature cannot be validated against a certifi
 
 <h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
 
-Measured Boot uses the same RoT as Secure Boot; however, unlike Secure Boot, it will check each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are stored inside the TPM so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
+Unlike Secure Boot, Measured Boot will measure each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are extended to the TPM  and added to a event log so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
 
 <h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
