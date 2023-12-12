@@ -46,7 +46,7 @@ Measured boot technologies rely on a RoT, a source that can always be trusted wi
 
 Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the kernel checks if a cryptographic signature, a hash value, on the boot loader matches a pre-loaded value signed by the manufacturer, stored inside the BIOS, that anyone can check using a public key made available. 
 
-Secure boot prevents boot if the two signatures, the preloaded value, and the calculated value during the boot process do not match. If the decrypted hash does not match the new one just taken, the secure boot will fail for reasons such as someone changing the kernel. This process of checking the kernel's signatures occurs before the OS ever runs.
+Secure Boot prevents boot if the signature cannot be validated against a certificate enrolled in the bootchain. For example if someone changes the kernel to a custom one, it is not signed by the OS vendor. This causes the boot to stop because the bootloader couldn't verify the signature. The process of checking the kernel's signatures occurs before the OS ever runs.
 
 <h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
 
