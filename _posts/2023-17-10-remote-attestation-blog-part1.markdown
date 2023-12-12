@@ -12,7 +12,7 @@ October 17, 2023
 
 Let’s say you have servers somewhere far away, potentially hosted by your company or some other provider, but you sometimes wonder if you could ever fully trust that no one is doing anything sketchy on them. You may ask yourself, how can I prove that my machines have not been tampered with, or how can I prove that they are being tampered with? You may wonder how you can trust them. With Remote Attestation, you don’t have to wonder; you can use existing hardware solutions to prove that the machines can be trusted and are indeed in a secure state. 
 
-This article is Part 1 of this blog series revolving around Remote Attestation and Keylime. In this piece, we will briefly examine the concept of Remote Attestation and several of its components. In the end, I will introduce you to a software solution called Keylime, which you can use to implement this type of attestation.
+This article is Part 1 of this blog series revolving around Remote Attestation and Keylime. In this piece, we will briefly examine the concept of Remote Attestation and several of its components. In the end, I will introduce you to Keylime, which is a software solution you can use to implement this type of attestation.
 
 <br>
 
