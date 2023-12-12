@@ -22,7 +22,7 @@ Cloud service providers, for example, inherently ask their customers to put sign
 
 This framework allows changes to the user’s computer, the attested (your remote servers), to be detected by authorized parties, the attestors (you on your local servers). In this framework, the attestor machine is already trusted by the customers, while the nodes they are provisioning through the cloud service providers are not. 
 
-Remote attestation can provide different services, such as measured boot attestation and runtime integrity monitoring, using a hardware-based cryptographic root of trust, otherwise known as a Trusted Platform Module (TPM). A TPM is a chip that conforms to the standards of a secure cryptoprocessor, which is a dedicated microcontroller designed to secure hardware through integrated cryptographic keys. It is used to store artifacts that work to authenticate the platform it is on. 
+Remote attestation can provide different services, such as measured boot attestation and runtime integrity monitoring, using a hardware-based cryptographic root of trust, for example as a Trusted Platform Module (TPM). A TPM is a chip that conforms to the standards of a secure cryptoprocessor, which is a dedicated microcontroller designed to secure hardware through integrated cryptographic keys. It is used to store artifacts that work to authenticate the platform it is on. 
 
 
 <div style="text-align: center;">
