@@ -12,7 +12,7 @@ October 17, 2023
 
 Let’s say you have servers somewhere far away, potentially hosted by your company or some other provider, but you sometimes wonder if you could ever fully trust that no one is doing anything sketchy on them. You may ask yourself, how can I prove that my machines have not been tampered with, or how can I prove that they are being tampered with? You may wonder how you can trust them. With Remote Attestation, you don’t have to wonder; you can use existing hardware solutions to prove that the machines can be trusted and are indeed in a secure state. 
 
-This article is Part 1 of this blog series revolving around Remote Attestation and Keylime. In this piece, we will briefly examine the concept of Remote Attestation and several of its components. In the end, I will introduce you to a software solution called Keylime, which you can use to implement this type of attestation.
+This article is Part 1 of this blog series revolving around Remote Attestation and Keylime. In this piece, we will briefly examine the concept of Remote Attestation and several of its components. In the end, I will introduce you to Keylime, which is a software solution you can use to implement this type of attestation.
 
 <br>
 
@@ -46,11 +46,11 @@ Measured boot technologies rely on a RoT, a source that can always be trusted wi
 
 Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the kernel checks if a cryptographic signature, a hash value, on the boot loader matches a pre-loaded value signed by the manufacturer, stored inside the BIOS, that anyone can check using a public key made available. 
 
-Secure boot prevents boot if the two signatures, the preloaded value, and the calculated value during the boot process do not match. If the decrypted hash does not match the new one just taken, the secure boot will fail for reasons such as someone changing the kernel. This process of checking the kernel's signatures occurs before the OS ever runs.
+Secure Boot prevents boot if the signature cannot be validated against a certificate enrolled in the bootchain. For example if someone changes the kernel to a custom one, it is not signed by the OS vendor. This causes the boot to stop because the bootloader couldn't verify the signature. The process of checking the kernel's signatures occurs before the OS ever runs.
 
 <h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
 
-Measured Boot uses the same RoT as Secure Boot; however, unlike Secure Boot, it will check each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are stored inside the TPM so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
+Unlike Secure Boot, Measured Boot will measure each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are extended to the TPM  and added to a event log so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
 
 <h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
