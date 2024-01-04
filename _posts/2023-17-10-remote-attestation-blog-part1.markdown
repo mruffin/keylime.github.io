@@ -22,7 +22,7 @@ Cloud service providers, for example, inherently ask their customers to put sign
 
 This framework allows changes to the user’s computer, the attested (your remote servers), to be detected by authorized parties, the attestors (you on your local servers). In this framework, the attestor machine is already trusted by the customers, while the nodes they are provisioning through the cloud service providers are not. 
 
-Remote attestation can provide different services, such as measured boot attestation and runtime integrity monitoring, using a hardware-based cryptographic root of trust, otherwise known as a Trusted Platform Module (TPM). A TPM is a chip that conforms to the standards of a secure cryptoprocessor, which is a dedicated microcontroller designed to secure hardware through integrated cryptographic keys. It is used to store artifacts that work to authenticate the platform it is on. 
+Remote attestation can provide different services, such as measured boot attestation and runtime integrity monitoring, using a hardware-based cryptographic "Root of Trust" (RoT), for example, a Trusted Platform Module (TPM). A TPM is a chip that conforms to the standards of a secure cryptoprocessor, which is a dedicated microcontroller designed to secure hardware through integrated cryptographic keys. It is used to store artifacts that work to authenticate the platform it is on. 
 
 
 <div style="text-align: center;">
@@ -42,7 +42,7 @@ In this article, we will detail the different aspects of remote attestation base
 
 <h3 style="text-align left; color:#6B98BF;"> What is Secure Boot? </h3>
 
-Trusted boot technologies rely on a “Root of Trust” (RoT), a source that can always be trusted within a cryptographic system. The RoT is usually a piece of code or hardware that’s been hardened well enough that it is unlikely to be compromised. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
+Measured boot technologies rely on a RoT, a source that can always be trusted within a cryptographic system. The RoT is usually a piece of code or hardware that’s been hardened well enough that it is unlikely to be compromised. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
 
 Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the kernel checks if a cryptographic signature, a hash value, on the boot loader matches a pre-loaded value signed by the manufacturer, stored inside the BIOS, that anyone can check using a public key made available. 
 
@@ -89,7 +89,7 @@ IMA also has another capability worth mentioning. Instead of using a third party
 
 Now that you know a little about some of the important components of Remote Attestation, I would like to introduce you to Keylime, a highly scalable, TPM-based remote boot attestation and runtime integrity measurement solution. Keylime helps to provide trust between its users and remote nodes. 
 
-Using a hardware-based cryptographic root of trust, a Keylime user can monitor their remote nodes for system tampering at boot while continuously in service. Keylime is an alert system that will notify the operator by raising a flag if measured boot attestation fails (i.e., someone has altered the kernel) or if runtime integrity monitoring fails (i.e., someone maliciously altered an executable system file). 
+Using a hardware-based cryptographic RoT, a Keylime user can monitor their remote nodes for system tampering at boot while continuously in service. Keylime is an alert system that will notify the operator by raising a flag if measured boot attestation fails (i.e., someone has altered the kernel) or if runtime integrity monitoring fails (i.e., someone maliciously altered an executable system file). 
 
 The Keylime tool mainly consists of 4 components: an **agent**, a **verifier**, a **registrar**, and a commandline tool called the **tenant**. 
 
@@ -103,7 +103,7 @@ And lastly, the tenant is a commandline management tool by Keylime used to manag
 
 <h4 style="text-align: center; color:#99A3A4 ;"> Keylime and Measured Boot </h4>
 
-As you’ve just read, measured boot, a form of trusted boot, is used to ensure that a machine has not been tampered with before it begins running any processes. Keylime makes use of recently updated kernel modules, tpm2_tools (5.0 or later), secure boot, and a “recent enough” version of grub (2.06 or later) to provide a scalable measured boot solution to clusters that could potentially have a large number of different types of nodes in a very flexible manner. 
+As you’ve just read, measured boot is used to ensure that a machine has not been tampered with before it begins running any processes. Keylime makes use of recently updated kernel modules, tpm2_tools (5.0 or later), secure boot, and a “recent enough” version of grub (2.06 or later) to provide a scalable measured boot solution to clusters that could potentially have a large number of different types of nodes in a very flexible manner. 
 
 Through Keylime, a “measured boot reference state” or *mb_refstate* is specified by the Tenant. The Keylime Verifier uses this reference state to compare to the boot log gathered by the Keylime Agent from the kernel. 
 
