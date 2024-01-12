@@ -50,7 +50,7 @@ Secure Boot prevents boot if the signature cannot be validated against a certifi
 
 <h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
 
-Unlike Secure Boot, Measured Boot will measure each startup component, including firmware, all the way up to the boot drivers. A hash is taken at each boot process step for the next object(s) in the chain. The hashes are extended to the TPM  and added to a event log so that they can be securely retrieved later to find out what objects were encountered. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
+Unlike Secure Boot, Measured Boot will measure each startup component, including firmware, all the way up to the boot drivers. A hash is taken at the first step in the boot process and is extended for the next object(s) in the chain. It is stored in a chosen Platform Configuration Register (PCR), which is a memory location in the TPM. The extend operation allows for data to be appended the value already stored in the PCR. A hash of the newly formed data is the result, and that is stored back into the PCR. The final hash can be seen as a checksum of log events. With this, an auditor can later come and validate the logs by computing the expected PCR values from the log and then comparing them to the PCR values of the TPM. One can verify the validity of the kernel because measured boot checks each compenent in the start-up process and the final hash value encapsulates all of them in their present (at that time) state. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
 
 <h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
