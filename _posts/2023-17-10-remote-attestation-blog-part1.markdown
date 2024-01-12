@@ -26,7 +26,7 @@ Remote attestation can provide different services, such as measured boot attesta
 
 
 <div style="text-align: center;">
-<img  src="/Users/margieruffin/Desktop/Research/Keylime/keylime.github.io/assets/images/RemoteAttestation.png" alt="Remote Attestation Diagram">
+<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/RemoteAttestation.png" alt="Remote Attestation Diagram">
 </div>
 
 **Figure 1: Remote Attestation is used to provide trust between an untrusted party and a trusted party. You can use services like Measured Boot Attestation and Runtime Integrity Monitoring to prove systems are trustworthy.**
@@ -42,9 +42,9 @@ In this article, we will detail the different aspects of remote attestation base
 
 <h3 style="text-align left; color:#6B98BF;"> What is Secure Boot? </h3>
 
-Measured boot technologies rely on a RoT, a source that can always be trusted within a cryptographic system. The RoT is usually a piece of code or hardware that’s been hardened well enough that it is unlikely to be compromised. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
+Measured boot technologies rely on a RoT, a source that can always be trusted within a cryptographic system. The RoT is a component that performs one or more security-specific functions, such as measurement, storage, reporting, verification, and/or update. It is trusted always to behave in the expected manner, because its misbehavior cannot be detected (such as by measurement) under normal operation. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
 
-Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the kernel checks if a cryptographic signature, a hash value, on the boot loader matches a pre-loaded value signed by the manufacturer, stored inside the BIOS, that anyone can check using a public key made available. 
+Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the next component is verified by the component before.
 
 Secure Boot prevents boot if the signature cannot be validated against a certificate enrolled in the bootchain. For example if someone changes the kernel to a custom one, it is not signed by the OS vendor. This causes the boot to stop because the bootloader couldn't verify the signature. The process of checking the kernel's signatures occurs before the OS ever runs.
 
@@ -54,15 +54,17 @@ Unlike Secure Boot, Measured Boot will measure each startup component, including
 
 <h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
-These two processes go hand-in-hand to ensure trusted Operating System (O/S) boots. Measured Boot guards the system from the processor powering on to the point where the operating system is ready to run. The issue is that once the O/S is booted, Measured Boot stops and its output is encapsulated into the measured boot log and the PCR values in the TPM. Now that the O/S is unguarded, it is **conceivable** that someone could manage to navigate to the boot event log, the PCRs, and the TPM and alter them retroactively. They could even go as far as to replace the TPM device with a virtual TPM. 
+These two processes go hand-in-hand to ensure a trusted Operating System (O/S) boots. Measured Boot guards the system from the processor powering on to the point where the operating system is ready to run. The issue is that once the O/S is booted, Measured Boot stops and its output is encapsulated into the measured boot log and the PCR values in the TPM. Now that the O/S is unguarded, it is **conceivable** that someone could manage to navigate to the boot event log, the PCRs, and the TPM and alter them retroactively. They could even go as far as to replace the TPM device with a virtual TPM. 
 
 Secure Boot depends on Measured Boot to guard the UEFI Bios. Measured Boot will check the competent and take a hash of it to be stored for later to help prove whether or not it has been tampered with. The UEFI Bios will prevent an unsigned kernel from booting properly if the hashes taken do not match at the time and will boot the kernel in “lockdown mode,” which will prevent alterations to it. This makes making retroactive alteration of the measured boot output harder. 
 
 Measured Boot guards the UEFI Bios during the secure boot process by taking a hash at its step in the boot process. Secure boot guards the post-boot integrity of the kernel by keeping it in “lockdown mode” in case something suspicious happens. Both are needed to get to a point where we have a completely booted system with a kernel that can be trusted. 
 
+In any production enviroment a large number of different types of nodes can be found. One can use remote attestation to in cobination with measured boot to determine and verifiy a platform's configuration. A measured boot reference state can be specified ahead of time for each node type and given to the remote attestation operator along with a measured boot policy that is used to instruct the verifier on how to do the comparison. With this mechanism in place the operator can ensure the validity of the kernals for their enitre cluster. 
+
 <h3 style="text-align left; color:#6B98BF;"> Integrity Measurement Architecture (IMA) for Continuous Attestation </h3>
 
-The two previously described aspects of Remote Attestation are helpful for a one-time check to see if the server you have provisioned was altered before it was booted and running. But what can you do if you want to continuously make sure that things aren’t being altered in real-time? You can use Linux kernel's Integrity Measurement Architecture (IMA) for that. Implementing IMA with your Remote Attestation framework lets you detect if files have been accidentally or maliciously altered. You can, both remotely and locally, appraise a file's current measurement against a "good" value stored as an extended attribute and enforce local file integrity. IMA collects file hashes and places them in kernel memory where other applications cannot access or modify them. With Secure and Measured Boot enabled, we established a chain of trust from the TPM all the way up to the running kernel. Because the kernel is now trusted, we can trust it to measure files with IMA, thus extending that trust to the files. 
+The two previously described aspects of Remote Attestation are helpful for a one-time check to see if the server you have provisioned was altered before it was booted and running. But what can you do if you want to continuously make sure that things aren’t being altered in real-time? You can use Linux kernel's Integrity Measurement Architecture (IMA) for that. Implementing IMA with your Remote Attestation framework lets you detect if files have been accidentally or maliciously altered. With Secure and Measured Boot enabled, we established a chain of trust from the TPM, which also serves as IMA's RoT, all the way up to the running kernel. Because the kernel is now trusted, we can trust it to measure files with IMA, thus extending that trust to the files. 
 
 In just a few short steps, we can see how IMA works.
 
@@ -74,17 +76,17 @@ In just a few short steps, we can see how IMA works.
 </ol>
 
 <div style="text-align: center;">
-<img  src="/Users/margieruffin/Desktop/Research/Keylime/keylime.github.io/assets/images/IMAVerifier.png" alt="Runtime Interigty Remote Attestation Diagram">
+<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/IMAVerifier.png" alt="Runtime Interigty Remote Attestation Diagram">
 </div>
 
 **Figure 2: We show the steps it takes to issue a verdict for a running system’s trustworthiness using Integrity Measurement Architecture (IMA).**
 
-IMA also has another capability worth mentioning. Instead of using a third party to appraise files as described above, IMA has the ability to do its own local appraisals. If it were configured to do so, if a file with an IMA hash is opened for reading or executing, the appraisal extension will check to see if the contents match the stored hash. This extension forbids any operation over a specific file in case the current measurement does not match the previous one unless stated otherwise. The stored hash is the value previously stored in the measurement file within the kernel memory for that file. The ima_appraise kernel command-line parameter will determine what happens if they don't match. If it is set to "enforce," access to the file is denied, while "fix" will update the IMA xattr with the new value.
+IMA also has another capability worth mentioning. Instead of using a third party to appraise files as described above, IMA has the ability to do its own local appraisals. IMA collects file hashes and places them in kernel memory where other applications cannot access or modify them. If it were configured to do so, if a file with an IMA hash is opened for reading or executing, the appraisal extension will check to see if the contents match the stored hash. This extension forbids any operation over a specific file in case the current measurement does not match the previous one unless stated otherwise. The stored hash is the value previously stored in the measurement file within the kernel memory for that file. The ima_appraise kernel command-line parameter will determine what happens if they don't match. If it is set to "enforce," access to the file is denied, while "fix" will update the IMA xattr with the new value.
 
 <h3 style="text-align; color:#6B98BF;"> Introduction to Keylime, a Remote Attestation Framework </h3>
 
 <div style="text-align: center;">
-<img  src="/Users/margieruffin/Desktop/Research/Keylime/keylime.github.io/assets/images/keylime.png" alt="Keylime Logo">
+<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/keylime.png" alt="Keylime Logo">
 </div>
 
 Now that you know a little about some of the important components of Remote Attestation, I would like to introduce you to Keylime, a highly scalable, TPM-based remote boot attestation and runtime integrity measurement solution. Keylime helps to provide trust between its users and remote nodes. 
@@ -117,7 +119,7 @@ If you want to read more about how to enable measured boot on Keylime, you can d
 
 To use Keylime’s Runtime Integrity Monitoring, there are a few steps that you will need to take to either enable Linux IMA or ensure that it is already running. As we learned a few sections ago, IMA is used to measure the contents of files at runtime. However, before it can do that, you will have to tell it what to measure using an ***ima-policy***. In the Keylime repository, you will find an example policy that can be used, and in the documentation, you will find instructions on enabling IMA. 
 
-In Keylime, a ***runtime policy*** is a list of “golden” cryptographic hashes of files in their untampered state that are used for IMA verification. The Keylime verifier will load the runtime policy and use it to validate the agent’s file states that are loaded onto the TPM. If the files have been tampered with, the hashes will not match, and Keylime will place the agent into a failed state. The Keylime agent and operating system itself are not deemed trustworthy by default. Given the setup only after the successful initial attestation is the system deemed trustworthy, but it still can leave the trusted state at any moment and is, therefore, continuously attested.
+In Keylime, a ***runtime policy*** is a list of “golden” cryptographic hashes of files in their untampered state that are used for IMA verification. The Keylime verifier will load the runtime policy and use it to validate the agent’s file states that are loaded onto the TPM. If the files have been tampered with, the hashes will not match, and Keylime will place the agent into a failed state. The Keylime agent and operating system itself are not deemed trustworthy by default. Given the setup only after the successful initial attestation is the system deemed trustworthy, but it still can leave the trusted state at any moment and is, therefore, continuously attested. It is important to mention that Keylime also supports the verification of IMA file signatures, which also helps to detect modifications on immutable files and can be used to complement or even replace the allowlist of hashes in the runtime policy if all relevant executables and libraries are signed. However, this setup is beyond the scope of this work.
 
 If you want to read more about how to build a runtime policy for Keylime and then deploy it, you can do that [here](https://keylime.readthedocs.io/en/latest/user_guide/runtime_ima.html). 
 
@@ -132,6 +134,6 @@ Keylime is commonly used either on bare metal hardware or in VMs where the TPM i
     <li> Runtime file and system integrity </li>
 </ul>
 
-While it won’t stop anything after an alert is raised, Keylime is still a great tool to have because it will tell you what has happened and where. Perfect for someone managing a lot of machines!
+In Keylime, you can implement whatever you want around the revocation hook that is provided, e.g. remove the node from the cluster when it detects that it is compromised. This makes Keylime a great tool to have for someone managing a lot of machines!
 
 Want to get in on all the action? Check out blog post part 2 (coming soon) in this series, <span style="color:#6B98BF"><strong> This is Keylime, a BEAST, but Totally Worth It</strong></span>, for a step-by-step tutorial on how to set up Keylime on your own machines. 
