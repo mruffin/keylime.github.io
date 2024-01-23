@@ -26,7 +26,7 @@ Remote attestation can provide different services, such as measured boot attesta
 
 
 <div style="text-align: center;">
-<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/RemoteAttestation.png" alt="Remote Attestation Diagram">
+<img  src="../assets/images/RemoteAttestation.png" alt="Remote Attestation Diagram">
 </div>
 
 **Figure 1: Remote Attestation is used to provide trust between an untrusted party and a trusted party. You can use services like Measured Boot Attestation and Runtime Integrity Monitoring to prove systems are trustworthy.**
@@ -42,25 +42,24 @@ In this article, we will detail the different aspects of remote attestation base
 
 <h3 style="text-align left; color:#6B98BF;"> What is Secure Boot? </h3>
 
-Measured boot technologies rely on a RoT, a source that can always be trusted within a cryptographic system. The RoT is a component that performs one or more security-specific functions, such as measurement, storage, reporting, verification, and/or update. It is trusted always to behave in the expected manner, because its misbehavior cannot be detected (such as by measurement) under normal operation. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
-
 Unified Extended Firmware Interface (UEFI) Secure Boot is a security measure developed to ensure that a device is booted using only software trusted by the Original Equipment Manufacturer (OEM). The goal is to prevent malicious software from being loaded and executed early in the boot process. During secure boot, the next component is verified by the component before.
 
 Secure Boot prevents boot if the signature cannot be validated against a certificate enrolled in the bootchain. For example if someone changes the kernel to a custom one, it is not signed by the OS vendor. This causes the boot to stop because the bootloader couldn't verify the signature. The process of checking the kernel's signatures occurs before the OS ever runs.
 
 <h3 style="text-align left; color:#6B98BF;"> What is Measured Boot? </h3>
+Measured boot technologies rely on a RoT, a source that can always be trusted within a cryptographic system. The RoT is a component that performs one or more security-specific functions, such as measurement, storage, reporting, verification, and/or update. It is trusted always to behave in the expected manner, because its misbehavior cannot be detected (such as by measurement) under normal operation. The RoT cannot be modified at all or cannot be modified without cryptographic credentials. 
 
 Unlike Secure Boot, Measured Boot will measure each startup component, including firmware, all the way up to the boot drivers. A hash is taken at the first step in the boot process and is extended for the next object(s) in the chain. It is stored in a chosen Platform Configuration Register (PCR), which is a memory location in the TPM. The extend operation allows for data to be appended the value already stored in the PCR. A hash of the newly formed data is the result, and that is stored back into the PCR. The final hash can be seen as a checksum of log events. With this, an auditor can later come and validate the logs by computing the expected PCR values from the log and then comparing them to the PCR values of the TPM. One can verify the validity of the kernel because measured boot checks each compenent in the start-up process and the final hash value encapsulates all of them in their present (at that time) state. With Measured Boot, the boot process is never stopped, but it provides the necessary information to detect attacks. 
 
 <h3 style="text-align left; color:#6B98BF;"> Measured Boot and Secure Boot Go Hand in Hand </h3>
 
-These two processes go hand-in-hand to ensure a trusted Operating System (O/S) boots. Measured Boot guards the system from the processor powering on to the point where the operating system is ready to run. The issue is that once the O/S is booted, Measured Boot stops and its output is encapsulated into the measured boot log and the PCR values in the TPM. Now that the O/S is unguarded, it is **conceivable** that someone could manage to navigate to the boot event log, the PCRs, and the TPM and alter them retroactively. They could even go as far as to replace the TPM device with a virtual TPM. 
+These two processes go hand-in-hand to ensure a trusted Operating System (O/S) boots. Measured Boot assesses the system from the processor powering on to the point where the operating system is ready to run. The issue is that once the O/S is booted, Measured Boot stops and its output is encapsulated into the measured boot log and the PCR values in the TPM. Now that the O/S is unguarded, it is **conceivable** that someone could manage to navigate to the boot event log, the PCRs, and the TPM and alter them retroactively. They could even go as far as to replace the TPM device with a virtual TPM. However, even if someone did manage to switch out the TPM to alter the boot event log, with the unique Endorsement Key (EK) bound to the TPM and and it's EK certificate signed by a trusted certifiate authority, the identity of a TPM can be verified before trust is established. 
 
-Secure Boot depends on Measured Boot to guard the UEFI Bios. Measured Boot will check the competent and take a hash of it to be stored for later to help prove whether or not it has been tampered with. The UEFI Bios will prevent an unsigned kernel from booting properly if the hashes taken do not match at the time and will boot the kernel in “lockdown mode,” which will prevent alterations to it. This makes making retroactive alteration of the measured boot output harder. 
+Secure Boot depends on Measured Boot to gaurd the UEFI Bios. Measured Boot will check the component and take a hash of it to be stored for later to help prove whether or not it has been tampered with. The UEFI Bios will prevent an unsigned kernel from booting properly if the hashes taken do not match at the time and will boot the kernel in “lockdown mode,” which will prevent alterations to it. Measured boot will allow for integrity checking after the system is booted.
 
 Measured Boot guards the UEFI Bios during the secure boot process by taking a hash at its step in the boot process. Secure boot guards the post-boot integrity of the kernel by keeping it in “lockdown mode” in case something suspicious happens. Both are needed to get to a point where we have a completely booted system with a kernel that can be trusted. 
 
-In any production enviroment a large number of different types of nodes can be found. One can use remote attestation to in cobination with measured boot to determine and verifiy a platform's configuration. A measured boot reference state can be specified ahead of time for each node type and given to the remote attestation operator along with a measured boot policy that is used to instruct the verifier on how to do the comparison. With this mechanism in place the operator can ensure the validity of the kernals for their enitre cluster. 
+In any production enviroment a large number of different types of nodes can be found. One can use remote attestation to in combination with measured boot to determine and verifiy a platform's configuration. A measured boot reference state can be specified ahead of time for each node type and given to the remote attestation operator along with a measured boot policy that is used to instruct the verifier on how to do the comparison. With this mechanism in place the operator can ensure the validity of the kernels for their entire cluster. 
 
 <h3 style="text-align left; color:#6B98BF;"> Integrity Measurement Architecture (IMA) for Continuous Attestation </h3>
 
@@ -69,14 +68,14 @@ The two previously described aspects of Remote Attestation are helpful for a one
 In just a few short steps, we can see how IMA works.
 
 <ol>
-    <li> An integrity challenge mechanism allows for a remote attestor (you on your trusted machine) to request a measurement list (IMA Log) and a TPM-signed aggregate of the measurement from the attesting system (the untrusted machine). </li>
+    <li> An integrity challenge mechanism allows for a remote attestor (you on your trusted machine) to request a measurement list (IMA Log) and a TPM-signed aggregate of the measurement from the attesting system (the untrusted machine). </li> 
     <li> The attestation service will then retrieve the signed aggregate from the TPM and the measurement list from the kernel and authenticate the log against the quote.</li>
     <li> The runtime policy is dictated by the system operator (you) and is used along with the IMA Log to validate the system’s file measurements.</li>
     <li> Finally, after the attestor has validated the information, they can reason about the trustworthiness of the attested’s runtime integrity and issue a verdict. </li>
 </ol>
 
 <div style="text-align: center;">
-<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/IMAVerifier.png" alt="Runtime Interigty Remote Attestation Diagram">
+<img  src="../assets/images/IMAVerifier.png" alt="Runtime Interigty Remote Attestation Diagram">
 </div>
 
 **Figure 2: We show the steps it takes to issue a verdict for a running system’s trustworthiness using Integrity Measurement Architecture (IMA).**
@@ -86,7 +85,7 @@ IMA also has another capability worth mentioning. Instead of using a third party
 <h3 style="text-align; color:#6B98BF;"> Introduction to Keylime, a Remote Attestation Framework </h3>
 
 <div style="text-align: center;">
-<img  src="/Users/mruffin2/Desktop/Research/Keylime/keylime.github.io/assets/images/keylime.png" alt="Keylime Logo">
+<img  src="../assets/images/keylime.png" alt="Keylime Logo">
 </div>
 
 Now that you know a little about some of the important components of Remote Attestation, I would like to introduce you to Keylime, a highly scalable, TPM-based remote boot attestation and runtime integrity measurement solution. Keylime helps to provide trust between its users and remote nodes. 
