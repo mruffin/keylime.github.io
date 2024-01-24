@@ -59,7 +59,7 @@ Secure Boot depends on Measured Boot to gaurd the UEFI Bios. Measured Boot will 
 
 Measured Boot guards the UEFI Bios during the secure boot process by taking a hash at its step in the boot process. Secure boot guards the post-boot integrity of the kernel by keeping it in “lockdown mode” in case something suspicious happens. Both are needed to get to a point where we have a completely booted system with a kernel that can be trusted. 
 
-In any production enviroment a large number of different types of nodes can be found. One can use remote attestation to in combination with measured boot to determine and verifiy a platform's configuration. A measured boot reference state can be specified ahead of time for each node type and given to the remote attestation operator along with a measured boot policy that is used to instruct the verifier on how to do the comparison. With this mechanism in place the operator can ensure the validity of the kernels for their entire cluster. 
+In any production enviroment a large number of different types of nodes can be found. One can use remote attestation in combination with measured boot to determine and verifiy a platform's configuration. A measured boot reference state can be specified ahead of time for each node type and given to the remote attestation operator along with a measured boot policy that is used to instruct the verifier on how to do the comparison. With this mechanism in place, the operator can ensure the validity of the kernels for their entire cluster. 
 
 <h3 style="text-align left; color:#6B98BF;"> Integrity Measurement Architecture (IMA) for Continuous Attestation </h3>
 
